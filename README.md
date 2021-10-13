@@ -34,3 +34,14 @@ In terminal:
 2. To generate api file -> make api-gen
 3. To build client software -> make phone-classify-client
 4. To build server software -> make phone-classify-server
+
+### 3. StringJoin GRPC
+
+Request stream <-> Response
+
+In terminal:
+
+1. To get dependences and create binary file -> make init
+2. To generate api file -> make api-gen
+3. To build client software -> make string-join-client
+4. To build server software -> make string-join-server
