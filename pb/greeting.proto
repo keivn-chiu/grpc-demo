@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+
+option go_package = "./greeting";
+
+package greeting;
+
+service Greeting {
+    rpc SayHiToSomeone(stream google.protobuf.StringValue) returns (stream google.protobuf.StringValue);
+}

@@ -45,3 +45,14 @@ In terminal:
 2. To generate api file -> make api-gen
 3. To build client software -> make string-join-client
 4. To build server software -> make string-join-server
+
+### 4. Greeting FRPC
+
+Request stream <-> Response stream
+
+In terminal:
+
+1. To get dependences and create binary file -> make init
+2. To generate api file -> make api-gen
+3. To build client software -> make greeting-client
+4. To build server software -> make greeting-server

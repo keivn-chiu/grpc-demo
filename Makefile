@@ -33,3 +33,11 @@ string-join-server:
 string-join-client:
 	go build -o string-join-client ./cmd/string-join-client/client.go ; \
 	mv string-join-client ./bin/
+
+greeting-server:
+	go build -o greeting-server ./cmd/greeting-server/server.go ; \
+	mv greeting-server ./bin/
+
+greeting-client:
+	go build -o greeting-client ./cmd/greeting-client/client.go ; \
+	mv greeting-client ./bin/
