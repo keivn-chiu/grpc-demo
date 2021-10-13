@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option go_package = "./phone";
+
+package phone;
+
+service PhoneHelper {
+    rpc classify(Phones) returns (stream Phones);
+}
+
+message Phones {
+    repeated Phone PhonesList = 1;
+}
+
+message Phone {
+    PhoneBrand brand = 1;
+    string name = 2;
+}
+
+enum PhoneBrand {
+    Apple = 0;
+    Samsung = 1;
+    HuaWei = 2;
+}

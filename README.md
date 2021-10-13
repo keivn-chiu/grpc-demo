@@ -15,9 +15,22 @@ Mac OS Environment:
 
 ### 1. ProductInfo GRPC
 
+Request <-> Response
+
 In terminal:
 
 1. To get dependences and create binary file -> make init
 2. To generate api file -> make api-gen
 3. To build client software -> make product-client
 4. To build server software -> make product-server
+
+### 2. PhoneClassify GRPC
+
+Request <-> Response stream
+
+In terminal:
+
+1. To get dependences and create binary file -> make init
+2. To generate api file -> make api-gen
+3. To build client software -> make phone-classify-client
+4. To build server software -> make phone-classify-server

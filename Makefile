@@ -18,3 +18,11 @@ product-client:
 product-server:
 	go build -o product-server ./cmd/product-server/server.go ; \
 	mv product-server ./bin/
+
+phone-classify-server:
+	go build -o phone-classify-server ./cmd/phone-classify-server/server.go ; \
+	mv phone-classify-server ./bin/
+
+phone-classify-client:
+	go build -o phone-classify-client ./cmd/phone-classify-client/client.go ; \
+	mv phone-classify-client ./bin/
