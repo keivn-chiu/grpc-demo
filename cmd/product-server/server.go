@@ -10,6 +10,7 @@ import (
 	pb "github.com/kevin-chiu/grpc-demo/api/product"
 	"github.com/kevin-chiu/grpc-demo/interceptors"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 )
 
 const port = ":50051"
@@ -20,7 +21,10 @@ func main() {
 		log.Fatalf("failed to listen: %s\n", err.Error())
 		return
 	}
-	s := grpc.NewServer(grpc.UnaryInterceptor(interceptors.LogUnaryServerInterceptor))
+	s := grpc.NewServer(
+		// grpc.UnaryInterceptor(interceptors.LogUnaryServerInterceptor),
+		grpc.UnaryInterceptor(interceptors.MetadataUnaryServerInterceptor),
+	)
 	pb.RegisterProductInfoServer(s, &server{})
 	log.Printf("start grpc listener on port %s\n", port)
 	if err := s.Serve(lis); err != nil {
@@ -33,6 +37,10 @@ type server struct {
 }
 
 func (s *server) AddProduct(ctx context.Context, product *pb.Product) (*pb.ProductId, error) {
+	m, ok := metadata.FromIncomingContext(ctx)
+	if ok {
+		log.Printf("metadata: %v\n", m)
+	}
 	s.products = append(s.products, product)
 	return &pb.ProductId{Value: strconv.Itoa(len(s.products) - 1)}, nil
 }

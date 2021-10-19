@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 )
 
 func LogUnaryServerInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
@@ -75,4 +76,29 @@ func LogStreamClientInterceptor(ctx context.Context, desc *grpc.StreamDesc, cc *
 		return nil, err
 	}
 	return newWrappedClientStream(cs), err
+}
+
+func MetadataUnaryClientInterceptor(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
+	md := metadata.Pairs("name", "kevin", "age", "30")
+	c := metadata.NewOutgoingContext(ctx, md)
+	err := invoker(c, method, req, reply, cc, opts...)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func MetadataUnaryServerInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
+	m, ok := metadata.FromIncomingContext(ctx)
+	if ok {
+		log.Printf("server get md: %v\n", m)
+	}
+	m.Delete("age")
+	m.Append("height", "178")
+	grpc.SendHeader(ctx, m)
+	md := metadata.New(map[string]string{"end": "true"})
+	grpc.SetTrailer(ctx, md)
+	resp, err = handler(ctx, req)
+	return
 }
