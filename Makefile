@@ -49,3 +49,7 @@ greeting-server:
 greeting-client:
 	go build -o greeting-client ./cmd/greeting-client/client.go ; \
 	mv greeting-client ./bin/
+
+multiple-grpc-server:
+	go build -o multiple-grpc-server ./cmd/multiple-grpc-server/server.go ; \
+	mv multiple-grpc-server ./bin/
