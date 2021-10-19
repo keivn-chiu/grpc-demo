@@ -6,13 +6,14 @@ import (
 	"time"
 
 	pb "github.com/kevin-chiu/grpc-demo/api/product"
+	"github.com/kevin-chiu/grpc-demo/interceptors"
 	"google.golang.org/grpc"
 )
 
 const address = "localhost:50051"
 
 func main() {
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithUnaryInterceptor(interceptors.LogUnaryClientInterceptor))
 	if err != nil {
 		log.Fatalf("can't connect: %v\n", err)
 	}

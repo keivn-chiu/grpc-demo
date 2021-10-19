@@ -41,3 +41,11 @@ func LogStreamServerInterceptor(srv interface{}, ss grpc.ServerStream, info *grp
 	log.Printf("cost: %d\n", time.Since(start).Nanoseconds())
 	return err
 }
+
+func LogUnaryClientInterceptor(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
+	start := time.Now()
+	log.Println("unary client -> before send requests")
+	err := invoker(ctx, method, req, reply, cc, opts...)
+	log.Printf("unary client -> after send requests cost: %d, reply: %v\n", time.Since(start).Nanoseconds(), reply)
+	return err
+}
