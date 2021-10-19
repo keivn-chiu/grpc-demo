@@ -16,20 +16,20 @@ func LogUnaryServerInterceptor(ctx context.Context, req interface{}, info *grpc.
 	return
 }
 
-type wrappedStream struct {
+type wrappedServerStream struct {
 	grpc.ServerStream
 }
 
-func newWrappedStream(ss grpc.ServerStream) *wrappedStream {
-	return &wrappedStream{ss}
+func newWrappedStream(ss grpc.ServerStream) *wrappedServerStream {
+	return &wrappedServerStream{ss}
 }
 
-func (w *wrappedStream) RecvMsg(m interface{}) error {
+func (w *wrappedServerStream) RecvMsg(m interface{}) error {
 	println("===== Server Interceptor Wrapper Recv =====")
 	return w.ServerStream.RecvMsg(m)
 }
 
-func (w *wrappedStream) SendMsg(m interface{}) error {
+func (w *wrappedServerStream) SendMsg(m interface{}) error {
 	println("===== Server Interceptor Wrapper Send =====")
 	return w.ServerStream.SendMsg(m)
 }
@@ -48,4 +48,31 @@ func LogUnaryClientInterceptor(ctx context.Context, method string, req, reply in
 	err := invoker(ctx, method, req, reply, cc, opts...)
 	log.Printf("unary client -> after send requests cost: %d, reply: %v\n", time.Since(start).Nanoseconds(), reply)
 	return err
+}
+
+type wrappedClientStream struct {
+	grpc.ClientStream
+}
+
+func newWrappedClientStream(cs grpc.ClientStream) *wrappedClientStream {
+	return &wrappedClientStream{cs}
+}
+
+func (w *wrappedClientStream) RecvMsg(m interface{}) error {
+	println("===== Client Interceptor Wrapper Recv =====")
+	return w.ClientStream.RecvMsg(m)
+}
+func (w *wrappedClientStream) SendMsg(m interface{}) error {
+	println("===== Client Interceptor Wrapper Send =====")
+	return w.ClientStream.SendMsg(m)
+}
+
+func LogStreamClientInterceptor(ctx context.Context, desc *grpc.StreamDesc, cc *grpc.ClientConn, method string, streamer grpc.Streamer, opts ...grpc.CallOption) (grpc.ClientStream, error) {
+	log.Printf("before do: %s\n", method)
+	// Streamer is called by StreamClientInterceptor to create a ClientStream.
+	cs, err := streamer(ctx, desc, cc, method, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return newWrappedClientStream(cs), err
 }

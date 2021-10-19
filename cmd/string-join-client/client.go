@@ -5,6 +5,7 @@ import (
 	"log"
 
 	pb "github.com/kevin-chiu/grpc-demo/api/string"
+	"github.com/kevin-chiu/grpc-demo/interceptors"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
@@ -12,7 +13,7 @@ import (
 const address = "localhost:50051"
 
 func main() {
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithStreamInterceptor(interceptors.LogStreamClientInterceptor))
 	if err != nil {
 		log.Fatalf("dial failed: %v\n", err)
 	}
