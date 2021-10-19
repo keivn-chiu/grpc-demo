@@ -50,6 +50,8 @@ func (s *server) Join(js pb.StringJoin_JoinServer) error {
 				return js.SendAndClose(&wrapperspb.StringValue{Value: final}) // here need to return func
 			}
 			if err != nil {
+				// here can get client context error
+				log.Println(errors.Is(js.Context().Err(), context.Canceled))
 				return err
 			}
 			strs = append(strs, str.Value)
