@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	pb "github.com/kevin-chiu/grpc-demo/api/product"
+	"github.com/kevin-chiu/grpc-demo/interceptors"
 	"google.golang.org/grpc"
 )
 
@@ -19,7 +20,7 @@ func main() {
 		log.Fatalf("failed to listen: %s\n", err.Error())
 		return
 	}
-	s := grpc.NewServer()
+	s := grpc.NewServer(grpc.UnaryInterceptor(interceptors.LogUnaryServerInterceptorfunc))
 	pb.RegisterProductInfoServer(s, &server{})
 	log.Printf("start grpc listener on port %s\n", port)
 	if err := s.Serve(lis); err != nil {
