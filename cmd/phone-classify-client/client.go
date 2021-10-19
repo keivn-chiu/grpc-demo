@@ -17,6 +17,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("create connection err: %v\n", err)
 	}
+	defer conn.Close()
 	cli := pb.NewPhoneHelperClient(conn)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()

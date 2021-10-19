@@ -44,6 +44,8 @@ func (s *server) Join(js pb.StringJoin_JoinServer) error {
 		default:
 			str, err := js.Recv()
 			if err == io.EOF {
+				// simulate handling delay
+				time.Sleep(time.Second)
 				final := strings.Join(strs, "->")
 				return js.SendAndClose(&wrapperspb.StringValue{Value: final}) // here need to return func
 			}

@@ -34,6 +34,10 @@ string-join-client:
 	go build -o string-join-client ./cmd/string-join-client/client.go ; \
 	mv string-join-client ./bin/
 
+string-join-client-deadline:
+	go build -o string-join-client-deadline ./cmd/string-join-client-deadline/client.go ; \
+	mv string-join-client-deadline ./bin/
+
 greeting-server:
 	go build -o greeting-server ./cmd/greeting-server/server.go ; \
 	mv greeting-server ./bin/

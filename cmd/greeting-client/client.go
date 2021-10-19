@@ -17,6 +17,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("dial err: %s\n", err.Error())
 	}
+	defer conn.Close()
 	cli := pb.NewGreetingClient(conn)
 
 	gctx := context.Background()

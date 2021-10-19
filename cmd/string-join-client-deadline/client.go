@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"time"
 
 	pb "github.com/kevin-chiu/grpc-demo/api/string"
 	"github.com/kevin-chiu/grpc-demo/interceptors"
@@ -13,14 +14,21 @@ import (
 const address = "localhost:50051"
 
 func main() {
-	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithStreamInterceptor(interceptors.LogStreamClientInterceptor))
+	conn, err := grpc.Dial(
+		address,
+		grpc.WithInsecure(),
+		grpc.WithStreamInterceptor(interceptors.LogStreamClientInterceptor),
+	)
 	if err != nil {
 		log.Fatalf("dial failed: %v\n", err)
 	}
 	defer conn.Close()
 	cli := pb.NewStringJoinClient(conn)
 
-	scli, err := cli.Join(context.Background())
+	// add deadline context
+	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(time.Second))
+	defer cancel()
+	scli, err := cli.Join(ctx)
 	if err != nil {
 		log.Fatalf("call func err: %v\n", err)
 	}
