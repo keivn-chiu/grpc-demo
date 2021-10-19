@@ -20,7 +20,7 @@ func main() {
 		log.Fatalf("failed to listen: %s\n", err.Error())
 		return
 	}
-	s := grpc.NewServer(grpc.UnaryInterceptor(interceptors.LogUnaryServerInterceptorfunc))
+	s := grpc.NewServer(grpc.UnaryInterceptor(interceptors.LogUnaryServerInterceptor))
 	pb.RegisterProductInfoServer(s, &server{})
 	log.Printf("start grpc listener on port %s\n", port)
 	if err := s.Serve(lis); err != nil {

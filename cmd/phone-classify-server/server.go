@@ -6,6 +6,7 @@ import (
 	"net"
 
 	pb "github.com/kevin-chiu/grpc-demo/api/phone"
+	"github.com/kevin-chiu/grpc-demo/interceptors"
 	"google.golang.org/grpc"
 )
 
@@ -16,7 +17,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to listen, %v\n", err)
 	}
-	s := grpc.NewServer()
+	s := grpc.NewServer(grpc.StreamInterceptor(interceptors.LogStreamServerInterceptor))
 	pb.RegisterPhoneHelperServer(s, &server{})
 	log.Printf("start to listen port: %s\n", port)
 	if err := s.Serve(l); err != nil {
